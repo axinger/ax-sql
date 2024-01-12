@@ -2,6 +2,29 @@
 SQL语句
 
 ## 查询当前数据及上一个数据
+### 上一条
+```mysql
+SELECT
+    t.*,
+    LAG(t.id) OVER (PARTITION BY t.code ORDER BY t.id) as prd_id,
+    LAG(t.code) OVER (PARTITION BY t.code ORDER BY t.id) as prd_code,
+    LAG(t.quantity) OVER (PARTITION BY t.code ORDER BY t.id) as pre_quantity
+FROM 
+    timeline t
+ORDER BY t.id DESC;
+```
+### 下一条,t.id DESC) 关键点
+```mysql
+SELECT
+    t.*,
+    LAG(t.id) OVER (PARTITION BY t.code ORDER BY t.id DESC) as prd_id,
+    LAG(t.code) OVER (PARTITION BY t.code ORDER BY t.id DESC) as prd_code,
+    LAG(t.quantity) OVER (PARTITION BY t.code ORDER BY t.id DESC) as pre_quantity
+FROM 
+    timeline t
+ORDER BY t.id;
+
+```
 ```sql
 WITH RankedData AS (
     SELECT   [机台编号] AS [上次机台编号],
